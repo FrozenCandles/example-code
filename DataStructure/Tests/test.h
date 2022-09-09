@@ -6,7 +6,8 @@
 #define DATASTRUCTURE_TEST_H
 
 /**
- * @addtogroup LinkedList {
+ * @addtogroup LinkedList
+ * @{
  */
 
 
@@ -23,32 +24,35 @@ void test_linkedlist_operations(void);
 void test_linkedlist_operations_more(void);
 
 /**
- * }
+ * @}
  */
 
 /**
- * @addtogroup Stack {
+ * @addtogroup Stack
+ * @{
  */
 
 status Symbol_IsBalanced(const char* code_segment);
 
 /**
- * }
+ * @}
  */
 
 
 /**
- * @addtogroup Tree {
+ * @addtogroup Tree
+ * @{
  */
 
 void test_avltree_create(void);
 
 /**
- * }
+ * @}
  */
 
 /**
- * @addtogroup Hash {
+ * @addtogroup Hash
+ * @{
  */
 
 unsigned int HashWord(const char* key, int table_size);
@@ -57,11 +61,12 @@ void test_hash_word(void);
 
 
 /**
- * }
+ * @}
  */
 
 /**
- * @addtogroup Heap {
+ * @addtogroup Heap
+ * @{
  */
 
 void test_binheap_operations(void);
@@ -69,7 +74,18 @@ void test_binheap_operations(void);
 void test_leftheap_merge(void);
 
 /**
- * }
+ * @}
+ */
+
+/**
+ * @addtogroup Sort
+ * @{
+ */
+
+void test_sort(void);
+
+/**
+ * @}
  */
 
 

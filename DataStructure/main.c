@@ -20,7 +20,9 @@ int main(int argc, char* argv[]) {
 //    test_hash_word();
 
 //    test_binheap_operations();
-    test_leftheap_merge();
+//    test_leftheap_merge();
+
+    test_sort();
 
     return 0;
 }
