@@ -22,7 +22,7 @@ int main(int argc, char* argv[]) {
 //    test_binheap_operations();
 //    test_leftheap_merge();
 
-    test_sort();
+//    test_sort();
 
     return 0;
 }

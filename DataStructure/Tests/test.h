@@ -38,6 +38,19 @@ status Symbol_IsBalanced(const char* code_segment);
  * @}
  */
 
+/**
+ * @addtogroup Queue
+ * @{
+ */
+
+void Queue_Print(queue q);
+
+void test_queue_operations(void);
+
+
+/**
+ * @}
+ */
 
 /**
  * @addtogroup Tree
