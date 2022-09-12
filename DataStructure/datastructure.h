@@ -15,7 +15,11 @@
 #include "linkedlist.h"
 #include "stack.h"
 #include "queue.h"
-
+#include "bsearchtree.h"
+#include "hash.h"
+#include "heap.h"
+#include "sort.h"
+#include "graph.h"
 
 
 #endif /* __DATASTRUCTURE_H__ */

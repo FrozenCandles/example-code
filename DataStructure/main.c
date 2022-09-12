@@ -14,6 +14,8 @@ int main(int argc, char* argv[]) {
 
 //    Symbol_IsBalanced("int [func({a: i, b: 2}), vector<T{c: 3}(*args)>]{1, 2, 3}");
 
+//    test_queue_operations();
+
 //    test_avltree_create();
 
 
@@ -23,6 +25,10 @@ int main(int argc, char* argv[]) {
 //    test_leftheap_merge();
 
 //    test_sort();
+
+//    test_graph_create();
+    test_graph_algorithms();
+
 
     return 0;
 }

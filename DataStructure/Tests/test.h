@@ -5,6 +5,8 @@
 #ifndef DATASTRUCTURE_TEST_H
 #define DATASTRUCTURE_TEST_H
 
+#include "../datastructure.h"
+
 /**
  * @addtogroup LinkedList
  * @{
@@ -101,6 +103,30 @@ void test_sort(void);
  * @}
  */
 
+/**
+ * @addtogroup Graph
+ * @{
+ */
 
+void Graph_Print(graph g);
+
+void test_graph_create(void);
+
+void test_graph_algorithms(void);
+
+/**
+ * @}
+ */
+
+
+
+/**
+ * @addtogroup
+ * @{
+ */
+
+/**
+ * @}
+ */
 
 #endif //DATASTRUCTURE_TEST_H

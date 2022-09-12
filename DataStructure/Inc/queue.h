@@ -36,6 +36,7 @@ status Queue_Enqueue(queue q, elemtype value);
 
 elemtype Queue_Dequeue(queue q);
 
+void Queue_Delete(queue q);
 
 #define queue_fromarray(q, arr, len) Queue_FromArray(q, len, arr, len)
 

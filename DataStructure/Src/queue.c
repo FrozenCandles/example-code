@@ -80,5 +80,10 @@ elemtype Queue_Dequeue(queue q) {
 }
 
 
-
+void Queue_Delete(queue q) {
+    if (q != NULL) {
+        free(q->body);
+        free(q);
+    }
+}
 
