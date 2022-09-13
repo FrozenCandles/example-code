@@ -24,9 +24,21 @@ typedef struct dulinkedlist_node {
 
 typedef linkedlist_node clinkedlist_node, * clinkedlist;
 
+/* create and delete */
+
+linkedlist LinkedList_New(void);
+
+void LinkedList_Clear(linkedlist l);
+
+void LinkedList_Delete(linkedlist l);
+
+linkedlist LinkedList_FromArray(const elemtype values[], int length);
+
 bool LinkedList_IsEmpty(linkedlist list);
 
 bool LinkedList_IsLast(linkedlist list);
+
+/* node operation */
 
 linkedlist_node* LinkedList_GetNode(linkedlist_node* node, elemtype value);
 
@@ -40,12 +52,12 @@ void LinkedList_Print(linkedlist_node* header);
 
 void LinkedList_Println(linkedlist_node* header);
 
-void LinkedList_Clear(linkedlist_node* header);
-
-linkedlist LinkedList_FromArray(const elemtype values[], int length);
-
-linkedlist LinkedList_New(void);
-
 linkedlist LinkedList_Reverse(linkedlist list);
+
+
+
+
+
+
 
 #endif //DATASTRUCTURE_LINKEDLIST_H

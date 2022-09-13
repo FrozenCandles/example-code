@@ -114,6 +114,8 @@ void test_linkedlist_operations(void) {
 
     LinkedList_Clear(list);
     LinkedList_Println(list);
+
+    LinkedList_Delete(list);
 }
 
 void test_linkedlist_operations_more(void) {
@@ -138,6 +140,9 @@ void test_linkedlist_operations_more(void) {
     printf("  After exchange : ");
     LinkedList_Println(list_P);
 
+    LinkedList_Delete(list_L);
+    LinkedList_Delete(list_P);
+
 
     linkedlist list_A = LinkedList_FromArray((int [7]){ 0, 1, 3, 4, 6, 7, 9 }, 7);
     linkedlist list_B = LinkedList_FromArray((int [7]){ 1, 2, 3, 6, 7, 8, 9 }, 7);
@@ -148,12 +153,20 @@ void test_linkedlist_operations_more(void) {
     LinkedList_Println(list_B);
 
     printf("Intersection   : ");
-    LinkedList_Println(LinkedList_Intersection(list_A, list_B));
+    linkedlist list_I = LinkedList_Intersection(list_A, list_B);
+    LinkedList_Println(list_I);
 
     linkedlist list_U = LinkedList_Union(list_A, list_B);
     printf("Union          : ");
     LinkedList_Println(list_U);
 
     printf("Union reversed : ");
-    LinkedList_Println(LinkedList_Reverse(list_U));
+    linkedlist list_UR = LinkedList_Reverse(list_U);
+    LinkedList_Println(list_UR);
+
+    LinkedList_Delete(list_A);
+    LinkedList_Delete(list_B);
+    LinkedList_Delete(list_I);
+    LinkedList_Delete(list_U);
+    LinkedList_Delete(list_UR);
 }

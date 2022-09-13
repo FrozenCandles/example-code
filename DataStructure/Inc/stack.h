@@ -44,6 +44,11 @@ elemtype Stack_Top(stack* s);
 
 elemtype Stack_PopTop(stack* s);
 
+/* Linked Stack */
+
+#define LinkedStack_New LinkedList_New
+
+#define LinkedStack_Delete LinkedList_Delete
 
 bool LinkedStack_IsEmpty(linkedstack s);
 

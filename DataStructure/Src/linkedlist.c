@@ -119,7 +119,7 @@ void LinkedList_Print(linkedlist_node* header) {
         temp = temp->next;
         count++;
     }
-    printf("|| }, size=%zu", count);
+    printf("|| }, size=%d", count);
 }
 
 
@@ -132,17 +132,17 @@ void LinkedList_Println(linkedlist_node* header) {
         temp = temp->next;
         count++;
     }
-    printf("|| }, size=%zu\n", count);
+    printf("|| }, size=%d\n", count);
 }
 
 /**
- * delete link list and each element
- * @param header
+ * clear linked list and each element
+ * @param l
  */
-void LinkedList_Clear(linkedlist_node* header) {
+void LinkedList_Clear(linkedlist l) {
     linkedlist_node* pres, * temp;
-    pres = header->next;
-    header->next = NULL;
+    pres = l->next;
+    l->next = NULL;
     while (pres != NULL) {
         temp = pres->next;
         free(pres);
@@ -169,7 +169,14 @@ linkedlist LinkedList_FromArray(const elemtype values[], int length) {
 
 linkedlist LinkedList_New(void) {
     linkedlist_node* header = malloc(sizeof(linkedlist_node));
+    header->next = NULL;
     return header;
+}
+
+void LinkedList_Delete(linkedlist l) {
+    if (!LinkedList_IsEmpty(l))
+        LinkedList_Clear(l);
+    free(l);
 }
 
 
@@ -245,3 +252,7 @@ clinkedlist CircularLinkedList_FromArray(const elemtype values[], int length) {
     pres->next = header;  // connect the header node and the tail node
     return header;
 }
+
+
+
+

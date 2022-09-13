@@ -90,15 +90,14 @@ status LinkedStack_Push(linkedstack s, elemtype value) {
         return 1;  // stack (memory) full
     cell->elem = value;
     cell->next = s->next;
-    s->next = cell->next;
+    s->next = cell;
     return 0;
 }
 
 status LinkedStack_Pop(linkedstack s) {
-    linkedstack first;
     if (LinkedStack_IsEmpty(s))
         return 1;
-    first = s->next;
+    linkedlist_node* first = s->next;
     s->next = s->next->next;
     free(first);
     return 0;
