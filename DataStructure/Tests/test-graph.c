@@ -42,20 +42,26 @@ static bool Vertex_PrintNext(graph_vertex* v) {
     return (bool) printf("%d > ", v->data);;
 }
 
+static void Vertex_PrintBefore(graph_vertex* v) {
+    printf("< %d ", v->data);;
+}
 
-void test_graph_algorithms(void) {
+
+void test_graph_topsort(void) {
     graph g1 = Graph_FromFile("../Source/graph1.txt");
     Graph_Print(g1);
     printf("\nTopological order: ");
     TopSort(g1, Vertex_PrintNext); puts("||");
+}
 
 
+void test_graph_search(void) {
     /* graph 2 looks like this:
-             A → D → G
-             ↓ ↘ ↓
-             B   E → H
-             ↓   ↓
-             C → F → I
+         A → D → G
+         ↓ ↘ ↓
+         B   E → H
+         ↓   ↓
+         C → F → I
     */
     graph g2 = Graph_FromFile("../Source/graph2.txt");
     Graph_Print(g2);
@@ -63,8 +69,38 @@ void test_graph_algorithms(void) {
     Graph_DepthFirstSearch(g2, Graph_GetFirstVertex(g2), Vertex_PrintNext); puts("||");
     printf("Breadth First Search from %d : ", Graph_GetFirstVertexData(g2));
     Graph_BreadthFirstSearch(g2, Graph_GetFirstVertex(g2), Vertex_PrintNext); puts("||");
+}
+
+
+
+void test_graph_shortestpathlength(void) {
+    graph g2 = Graph_FromFile("../Source/graph2.txt");
+    Graph_Print(g2); putchar('\n');
     printf("The shortest path from %d to %d is %d\n", 1, 8,
            Graph_UnweightedPathLength(g2, Graph_GetVertexByData(g2, 1), Graph_GetVertexByData(g2, 8)));
     printf("The shortest path from %d to %d is %d\n", 1, 9,
            Graph_UnweightedPathLength(g2, Graph_GetVertexByData(g2, 1), Graph_GetVertexByData(g2, 9)));
+
+    graph g3 = Graph_FromFile("../Source/graph3.txt");
+    Graph_Print(g3); putchar('\n');
+    printf("The shortest path from %d to %d is %d\n", 1, 8,
+           Graph_WeightedPath_Dijkstra(g3, Graph_GetVertexByData(g3, 1), Graph_GetVertexByData(g3, 8)));
+    printf("The shortest path from %d to %d is %d\n", 1, 7,
+           Graph_WeightedPath_Dijkstra(g3, Graph_GetVertexByData(g3, 1), Graph_GetVertexByData(g3, 7)));
 }
+
+void test_graph_minimumspanningtree(void) {
+    puts("Original graph: (doubly connected)");
+    graph g3 = Graph_FromFile("../Source/graph3.txt");
+    Graph_Print(g3); putchar('\n');
+
+    puts("Minimum spanning tree using Kruskal algorithm:");
+    graph g3_minB = Graph_MinSpanTree_Kruskal(g3);  // could use Graph_CreateDoublyConnectedByData()
+    Graph_Print(g3_minB); putchar('\n');
+
+    Graph_CreateDoublyConnectedByData(g3);
+    puts("Minimum spanning tree using Prim algorithm:");
+    graph g3_minA = Graph_MinSpanTree_Prim(g3);     // could use Graph_CreateDoublyConnectedByData()
+    Graph_Print(g3_minA); putchar('\n');
+}
+

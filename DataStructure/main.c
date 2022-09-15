@@ -27,8 +27,10 @@ int main(int argc, char* argv[]) {
 //    test_sort();
 
 //    test_graph_create();
-    test_graph_algorithms();
-
+//    test_graph_topsort();
+//    test_graph_search();
+//    test_graph_shortestpathlength();
+//    test_graph_minimumspanningtree();
 
     return 0;
 }

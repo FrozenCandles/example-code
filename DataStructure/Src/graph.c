@@ -227,7 +227,7 @@ void Graph_GatherInDegree(graph g, int indegree[]) {
 
 
 
-void TopSort(graph g, bool (*collect)(graph_vertex* v)) {
+void TopSort(graph g, bool (*collect)(graph_vertex*)) {
     int indegree[VERTEX_MAXNUM];
     memset(&indegree, 0, sizeof indegree);
     Graph_GatherInDegree(g, indegree);
@@ -335,6 +335,201 @@ int Graph_UnweightedPathLength(graph g, graph_vertex* v, graph_vertex* w) {
     Queue_Delete(q);
     return -1;
 }
+
+
+int Graph_WeightedPath_Dijkstra(graph g, graph_vertex* v, graph_vertex* w) {
+    bool visited[VERTEX_MAXNUM];
+    int minpathlen[VERTEX_MAXNUM];
+    memset(visited, 0, sizeof visited);
+    for (int i = 0; i < VERTEX_MAXNUM; i++) minpathlen[i] = INT_MAX;
+
+    minpathlen[v->data] = 0;
+    for (int i = 0; i < g->size; i++) {
+        if (!g->vertices[i]) continue;
+        int minv = 0;
+        int minlen = INT_MAX;
+
+        for (int j = 0; j < g->size; j++)
+            if (!visited[j] && minpathlen[j] < minlen) {
+                minv = j;
+                minlen = minpathlen[minv];
+            }
+        visited[minv] = true;
+        graph_vertex* v_k = Graph_GetVertexByData(g, minv);
+        for (graph_arc* arc = v_k->firstarc; arc; arc = arc->nextarc) {
+            graph_vertex* u = arc->vertex;
+            if (!visited[u->data] && (minlen + arc->weight < minpathlen[u->data]))
+                minpathlen[u->data] = minlen + arc->weight;
+        }
+    }
+    return minpathlen[w->data];
+}
+
+
+
+void Graph_CreateDoublyConnectedByData(graph g) {
+    linkedstack list_V = LinkedStack_New();
+    linkedstack list_E = LinkedStack_New();
+    linkedstack list_W = LinkedStack_New();
+    for (int i = 0; i < g->size; i++)
+        if (g->vertices[i])
+            for (graph_arc* arc = g->vertices[i]->firstarc; arc; arc = arc->nextarc) {
+                LinkedStack_Push(list_V, g->vertices[i]->data);
+                LinkedStack_Push(list_E, arc->vertex->data);
+                LinkedStack_Push(list_W, arc->weight);
+            }
+    while (!LinkedStack_IsEmpty(list_V)) {
+        Graph_AddEdgeByData(g,
+                            LinkedStack_Top(list_E),
+                            LinkedStack_Top(list_V),
+                            LinkedStack_Top(list_W));
+        LinkedStack_Pop(list_V);
+        LinkedStack_Pop(list_E);
+        LinkedStack_Pop(list_W);
+    }
+    LinkedStack_Delete(list_V);
+    LinkedStack_Delete(list_E);
+    LinkedStack_Delete(list_W);
+}
+
+
+graph Graph_MinSpanTree_Prim(graph g) {
+#if 0
+    bool isintree[VERTEX_MAXNUM];
+    memset(isintree, 0, sizeof isintree);
+
+    graph m = Graph_New(VERTEX_MAXNUM);
+    for (int i = 0; i < g->size; i++)
+        if (g->vertices[i])
+            Graph_AddVertex(m, g->vertices[i]->data);
+
+    isintree[g->vertices[0]->data] = true;
+    for (int _ = 0; _ < g->size; _++) {  // loop N times
+        int min_arc_from = -1;
+        int min_arc_to = -1;
+        int min_len = INT_MAX;
+        for (int i = 0; i < g->size; i++)
+            if (g->vertices[i] && isintree[g->vertices[i]->data])
+                for (graph_arc* arc = g->vertices[i]->firstarc; arc; arc = arc->nextarc) {
+                    graph_vertex *u = arc->vertex;
+                    if ((!isintree[u->data] && arc->weight < min_len)) {
+                        min_len = arc->weight;
+                        min_arc_from = g->vertices[i]->data;
+                        min_arc_to = arc->vertex->data;
+                    }
+                }
+        if (min_arc_to != -1) {
+            isintree[min_arc_to] = true;
+            Graph_AddEdgeByData(m, min_arc_from, min_arc_to, min_len);
+        }
+    }
+    return m;
+#else
+    int minpathfrom[g->size];
+    int minpathlen[g->size];
+    memset(minpathfrom, -1, sizeof minpathfrom);
+    for (int i = 0; i < g->size; i++) minpathlen[i] = INT_MAX;
+
+    // create graph with single vertices
+    graph m = Graph_New(VERTEX_MAXNUM);
+    for (int i = 0; i < g->size; i++)
+        if (g->vertices[i])
+            Graph_AddVertex(m, g->vertices[i]->data);
+
+    int min_vtx = g->vertices[0]->data;
+    for (graph_arc* arc = g->vertices[0]->firstarc; arc; arc = arc->nextarc) {
+        minpathfrom[arc->vertex->data] = min_vtx;
+        minpathlen[arc->vertex->data] = arc->weight;
+    }
+    minpathlen[min_vtx] = 0;  // put it in the tree
+
+    for (int i = 1; i < g->size; i++) {
+        if (!g->vertices[i])
+            continue;
+
+        int min_len = INT_MAX;   // find the closest vertex
+        for (int j = 0; j < g->size; j++)
+            if (minpathlen[j] != 0 && minpathlen[j] < min_len) {
+                min_len = minpathlen[j];
+                min_vtx = j;
+            }
+
+        /* put it in the tree */
+        minpathlen[min_vtx] = 0;
+        Graph_AddEdgeByData(m, Graph_GetVertexByData(g, minpathfrom[min_vtx])->data, Graph_GetVertexByData(g, min_vtx)->data, min_len);
+
+        /* update adjacent vertex */
+        for (graph_arc* arc = Graph_GetVertexByData(g, min_vtx)->firstarc; arc; arc = arc->nextarc)
+            if (minpathlen[arc->vertex->data] != 0 && arc->weight < minpathlen[arc->vertex->data]) {
+                minpathfrom[arc->vertex->data] = min_vtx;
+                minpathlen[arc->vertex->data] = arc->weight;
+            }
+    }
+    return m;
+#endif
+}
+
+
+struct _graph_arc {
+    int from;
+    int to;
+    int weight;
+};
+
+static int CompareByWeight(const void* a,const void* b) {
+    return ((struct _graph_arc*)a)->weight - ((struct _graph_arc*)b)->weight;
+}
+
+/**
+ * @brief
+ * use directed graph to represent undirected graph
+ * @param g
+ * @return
+ */
+graph Graph_MinSpanTree_Kruskal(graph g) {
+
+    struct _graph_arc arcs[g->arc_num];
+    memset(arcs, 0, sizeof arcs);
+    int arcs_ptr = 0;
+    int conn_mark[g->size];
+    for (int i = 0; i < g->size; i++) conn_mark[i] = i;
+
+    // create graph with single vertices, and collect arcs
+    graph m = Graph_New(VERTEX_MAXNUM);
+    for (int i = 0; i < g->size; i++)
+        if (g->vertices[i]) {
+            Graph_AddVertex(m, g->vertices[i]->data);
+            for (graph_arc* arc = g->vertices[i]->firstarc; arc; arc = arc->nextarc)
+                arcs[arcs_ptr++] = (struct _graph_arc) {
+                    .from=g->vertices[i]->data, .to=arc->vertex->data, .weight=arc->weight };
+        }
+    qsort(arcs, g->arc_num, sizeof(struct _graph_arc), CompareByWeight);
+
+    int arcs_inserted = 0;
+    for (int i = 0; i < g->arc_num; i++) {
+        /* make sure no cycle will be added */
+        if (conn_mark[arcs[i].from] != conn_mark[arcs[i].to]) {
+            /* insert edge to tree */
+            graph_vertex* v = Graph_GetVertexByData(m, arcs[i].from);
+            graph_vertex* w = Graph_GetVertexByData(m, arcs[i].to);
+            Graph_AddEdge(m, v, w, arcs[i].weight);
+            Graph_AddEdge(m, w, v, arcs[i].weight);
+            /* union sets between edge */
+            for (int k = 0; k < g->vertex_num; k++)
+                if (conn_mark[k] == conn_mark[arcs[i].to])
+                    conn_mark[k] = conn_mark[arcs[i].from];
+
+            arcs_inserted++;
+
+            if (arcs_inserted == g->vertex_num - 1)  // minimum spanning tree has created
+                break;
+        }
+    }
+
+
+    return m;
+}
+
 
 
 

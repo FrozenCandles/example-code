@@ -9,17 +9,21 @@
 #include "pubdef.h"
 
 #include "queue.h"
+#include "stack.h"
 
 typedef struct graph_arc graph_arc;
+
 typedef struct graph_vertex {
     elemtype data;
     graph_arc* firstarc;
 } graph_vertex;
+
 struct graph_arc {
     graph_vertex* vertex;
     struct graph_arc* nextarc;
     int weight;
 };
+
 typedef struct graph {
     graph_vertex** vertices;
     int vertex_num;
@@ -36,6 +40,8 @@ typedef struct graph {
 graph Graph_New(int max_vertices);
 
 graph Graph_FromFile(char* filename);
+
+void Graph_CreateDoublyConnectedByData(graph g);
 
 /* vertex */
 
@@ -72,5 +78,11 @@ void Graph_DepthFirstSearch(graph g, graph_vertex* v, bool (*collect)(graph_vert
 void Graph_BreadthFirstSearch(graph g, graph_vertex* v, bool (*collect)(graph_vertex*));
 
 int Graph_UnweightedPathLength(graph g, graph_vertex* v, graph_vertex* w);
+
+int Graph_WeightedPath_Dijkstra(graph g, graph_vertex* v, graph_vertex* w);
+
+graph Graph_MinSpanTree_Prim(graph g);
+
+graph Graph_MinSpanTree_Kruskal(graph g);
 
 #endif /* __GRAPH_H__ */

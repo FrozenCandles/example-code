@@ -112,7 +112,14 @@ void Graph_Print(graph g);
 
 void test_graph_create(void);
 
-void test_graph_algorithms(void);
+void test_graph_topsort(void);
+
+void test_graph_search(void);
+
+void test_graph_shortestpathlength(void);
+
+void test_graph_minimumspanningtree(void);
+
 
 /**
  * @}
